@@ -1,0 +1,679 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Quiz MBE — Bioestadística Descriptiva y Analítica | UPAO</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,400&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --navy: #0D1B4E;
+  --blue: #1565C0;
+  --blue-mid: #1976D2;
+  --blue-light: #E3F0FF;
+  --amber: #FFC107;
+  --amber-dk: #F57C00;
+  --teal: #00838F;
+  --teal-light: #E0F7FA;
+  --green: #2E7D32;
+  --green-light: #E8F5E9;
+  --red: #C62828;
+  --red-light: #FFEBEE;
+  --gray: #546E7A;
+  --gray-light: #ECEFF1;
+  --white: #FFFFFF;
+  --bg: #F7FAFF;
+  --card: #FFFFFF;
+  --border: rgba(0,0,0,0.08);
+  --text: #1A1A2E;
+  --muted: #607D8B;
+  --radius: 12px;
+  --radius-sm: 8px;
+  --shadow: 0 2px 12px rgba(13,27,78,0.08);
+  --shadow-lg: 0 8px 32px rgba(13,27,78,0.12);
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'DM Sans', system-ui, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  line-height: 1.6;
+}
+
+/* ── HEADER ── */
+.site-header {
+  background: var(--navy);
+  padding: 0 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 56px;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.2);
+}
+.header-left { display: flex; align-items: center; gap: 12px; }
+.header-logo {
+  width: 32px; height: 32px;
+  background: var(--amber);
+  border-radius: 8px;
+  display: flex; align-items: center; justify-content: center;
+  font-weight: 600; font-size: 14px; color: var(--navy);
+}
+.header-title { font-size: 14px; font-weight: 500; color: #AABBDD; }
+.header-title strong { color: var(--white); }
+.header-badge {
+  background: rgba(255,193,7,0.15);
+  border: 1px solid rgba(255,193,7,0.3);
+  color: var(--amber);
+  font-size: 11px; font-weight: 500;
+  padding: 3px 10px; border-radius: 99px;
+}
+
+/* ── MAIN LAYOUT ── */
+.main { max-width: 720px; margin: 0 auto; padding: 2rem 1.25rem 4rem; }
+
+/* ── HERO ── */
+.hero {
+  background: var(--navy);
+  border-radius: var(--radius);
+  padding: 2rem 2rem 1.75rem;
+  margin-bottom: 1.5rem;
+  position: relative;
+  overflow: hidden;
+}
+.hero::before {
+  content: '';
+  position: absolute;
+  top: -40px; right: -40px;
+  width: 200px; height: 200px;
+  background: rgba(255,193,7,0.06);
+  border-radius: 50%;
+}
+.hero-eyebrow {
+  font-size: 11px; font-weight: 500; letter-spacing: 0.1em;
+  text-transform: uppercase; color: var(--amber);
+  margin-bottom: 0.5rem;
+}
+.hero h1 {
+  font-size: clamp(1.4rem, 4vw, 1.9rem);
+  font-weight: 600; color: var(--white);
+  line-height: 1.3; margin-bottom: 0.75rem;
+}
+.hero h1 span { color: var(--amber); }
+.hero-sub { font-size: 14px; color: #AABBDD; line-height: 1.6; margin-bottom: 1.25rem; }
+.hero-pills { display: flex; flex-wrap: wrap; gap: 6px; }
+.pill {
+  font-size: 11px; font-weight: 500;
+  padding: 4px 12px; border-radius: 99px;
+  border: 1px solid rgba(255,255,255,0.12);
+  color: #AABBDD;
+}
+.pill.blue { background: rgba(21,101,192,0.35); border-color: rgba(21,101,192,0.5); color: #90CAF9; }
+.pill.green { background: rgba(46,125,50,0.35); border-color: rgba(46,125,50,0.5); color: #A5D6A7; }
+.pill.amber { background: rgba(255,193,7,0.15); border-color: rgba(255,193,7,0.3); color: var(--amber); }
+
+/* ── PROGRESS ── */
+.progress-wrap { margin-bottom: 1.25rem; }
+.progress-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+.progress-label { font-size: 13px; color: var(--muted); }
+.progress-score { font-size: 13px; font-weight: 600; color: var(--blue); }
+.progress-bar-bg { height: 6px; background: var(--gray-light); border-radius: 99px; overflow: hidden; }
+.progress-bar-fill { height: 6px; background: linear-gradient(90deg, var(--blue), #42A5F5); border-radius: 99px; transition: width 0.45s cubic-bezier(.4,0,.2,1); width: 0%; }
+
+/* ── SECTION BADGE ── */
+.section-tag {
+  display: inline-flex; align-items: center; gap: 6px;
+  font-size: 11px; font-weight: 600; letter-spacing: 0.05em;
+  text-transform: uppercase;
+  padding: 5px 12px; border-radius: 99px;
+  margin-bottom: 1rem;
+}
+.section-tag.desc { background: var(--blue-light); color: var(--blue); }
+.section-tag.anal { background: var(--green-light); color: var(--green); }
+.section-tag .dot { width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
+
+/* ── QUESTION CARD ── */
+.q-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.5rem;
+  margin-bottom: 1rem;
+  box-shadow: var(--shadow);
+}
+.q-text {
+  font-size: 16px; font-weight: 500;
+  color: var(--text); line-height: 1.65;
+  margin-bottom: 1.25rem;
+}
+.q-hint {
+  font-size: 13px; color: var(--amber-dk);
+  background: #FFF8E1;
+  border-left: 3px solid var(--amber);
+  padding: 8px 12px; border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+  margin-bottom: 1rem;
+  display: none;
+}
+
+/* ── OPTIONS ── */
+.options { display: flex; flex-direction: column; gap: 8px; }
+.opt-btn {
+  display: flex; align-items: flex-start; gap: 12px;
+  background: var(--bg);
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 0.9rem 1rem;
+  cursor: pointer;
+  text-align: left;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 14px; color: var(--text);
+  line-height: 1.55;
+  transition: border-color 0.15s, background 0.15s, transform 0.1s;
+  width: 100%;
+}
+.opt-btn:hover:not(:disabled) {
+  border-color: var(--blue);
+  background: var(--blue-light);
+  transform: translateX(2px);
+}
+.opt-btn:disabled { cursor: default; transform: none; }
+.opt-btn.correct { border-color: var(--green); background: var(--green-light); }
+.opt-btn.wrong { border-color: var(--red); background: var(--red-light); }
+.opt-btn.missed { border-color: var(--green); background: var(--green-light); opacity: 0.6; }
+.opt-letter {
+  font-family: 'DM Mono', monospace;
+  font-size: 12px; font-weight: 500;
+  min-width: 24px; height: 24px;
+  background: rgba(0,0,0,0.05);
+  border-radius: 6px;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0; margin-top: 1px;
+  color: var(--muted);
+}
+.opt-btn.correct .opt-letter { background: rgba(46,125,50,0.2); color: var(--green); }
+.opt-btn.wrong .opt-letter { background: rgba(198,40,40,0.15); color: var(--red); }
+.opt-btn.missed .opt-letter { background: rgba(46,125,50,0.2); color: var(--green); }
+
+/* ── FEEDBACK ── */
+.feedback {
+  margin-top: 1rem;
+  padding: 1rem 1.1rem;
+  border-radius: var(--radius-sm);
+  font-size: 13.5px;
+  line-height: 1.65;
+  display: none;
+  animation: fadeIn 0.2s ease;
+}
+.feedback.correct { background: var(--green-light); border: 1px solid rgba(46,125,50,0.25); color: #1B5E20; }
+.feedback.wrong { background: var(--red-light); border: 1px solid rgba(198,40,40,0.2); color: #7F1010; }
+.feedback-icon { font-size: 16px; margin-right: 6px; }
+
+@keyframes fadeIn { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: none; } }
+
+/* ── NAV ── */
+.nav-row { display: flex; justify-content: flex-end; }
+.next-btn {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 10px 24px;
+  background: var(--blue);
+  color: var(--white);
+  border: none; border-radius: var(--radius-sm);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 14px; font-weight: 500;
+  cursor: pointer;
+  opacity: 0; pointer-events: none;
+  transition: opacity 0.2s, background 0.15s, transform 0.1s;
+}
+.next-btn.visible { opacity: 1; pointer-events: auto; }
+.next-btn:hover { background: var(--blue-mid); transform: translateY(-1px); }
+.next-btn:active { transform: translateY(0); }
+.next-btn svg { width: 16px; height: 16px; }
+
+/* ── RESULTS ── */
+.results {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 2rem 1.5rem;
+  box-shadow: var(--shadow-lg);
+  display: none;
+  animation: fadeIn 0.3s ease;
+}
+.results-hero { text-align: center; margin-bottom: 1.75rem; }
+.results-emoji { font-size: 3rem; margin-bottom: 0.75rem; }
+.results-pct {
+  font-size: 4rem; font-weight: 600;
+  color: var(--navy); line-height: 1;
+  margin-bottom: 0.25rem;
+}
+.results-pct.great { color: var(--green); }
+.results-pct.ok { color: var(--amber-dk); }
+.results-pct.low { color: var(--red); }
+.results-label { font-size: 14px; color: var(--muted); }
+
+.stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 1.25rem; }
+.stat-card {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 1rem;
+}
+.stat-label { font-size: 11px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.05em; color: var(--muted); margin-bottom: 4px; }
+.stat-val { font-size: 1.6rem; font-weight: 600; }
+.stat-val.g { color: var(--green); }
+.stat-val.r { color: var(--red); }
+.stat-val.b { color: var(--blue); }
+.stat-val.a { color: var(--amber-dk); }
+
+.msg-box {
+  background: var(--blue-light);
+  border: 1px solid rgba(21,101,192,0.15);
+  border-radius: var(--radius-sm);
+  padding: 1rem 1.1rem;
+  font-size: 13.5px; color: #0D3B8E;
+  line-height: 1.65; margin-bottom: 1.5rem;
+}
+
+.results-actions { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 1.75rem; }
+.btn-primary {
+  flex: 1; min-width: 140px;
+  display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+  padding: 10px 20px;
+  background: var(--navy);
+  color: var(--white);
+  border: none; border-radius: var(--radius-sm);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 14px; font-weight: 500;
+  cursor: pointer; transition: background 0.15s;
+}
+.btn-primary:hover { background: var(--blue); }
+.btn-secondary {
+  flex: 1; min-width: 140px;
+  display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+  padding: 10px 20px;
+  background: transparent;
+  color: var(--navy);
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-sm);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 14px; font-weight: 500;
+  cursor: pointer; transition: background 0.15s;
+}
+.btn-secondary:hover { background: var(--bg); }
+
+/* ── REVIEW ── */
+.review-title { font-size: 14px; font-weight: 600; color: var(--text); margin-bottom: 12px; padding-bottom: 8px; border-bottom: 1px solid var(--border); }
+.review-item { padding: 10px 0; border-bottom: 1px solid var(--border); }
+.review-item:last-child { border-bottom: none; }
+.review-q { font-size: 13px; font-weight: 500; color: var(--text); margin-bottom: 4px; }
+.review-ans { font-size: 12.5px; padding: 3px 0; }
+.review-ans.c { color: var(--green); }
+.review-ans.w { color: var(--red); }
+.review-ans.correct { color: var(--green); }
+
+/* ── FOOTER ── */
+.site-footer {
+  background: var(--navy);
+  padding: 1.25rem 1.5rem;
+  text-align: center;
+  font-size: 12px;
+  color: #607DA0;
+  margin-top: 3rem;
+}
+.site-footer strong { color: #AABBDD; }
+
+/* ── RESPONSIVE ── */
+@media (max-width: 500px) {
+  .main { padding: 1.25rem 1rem 3rem; }
+  .hero { padding: 1.5rem; }
+  .q-card { padding: 1.25rem; }
+  .stats-grid { grid-template-columns: 1fr 1fr; }
+}
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="header-left">
+    <div class="header-logo">U</div>
+    <span class="header-title"><strong>MBE e IA</strong> · Quiz interactivo</span>
+  </div>
+  <span class="header-badge">Semanas 5 y 6</span>
+</header>
+
+<main class="main">
+
+  <!-- HERO -->
+  <div class="hero">
+    <div class="hero-eyebrow">Universidad Privada Antenor Orrego · Medicina Humana</div>
+    <h1>Bioestadística <span>Descriptiva</span> y Analítica</h1>
+    <p class="hero-sub">Quiz de autoevaluación sobre estadística descriptiva (Semana 5) y medidas de asociación — RP, OR y RR (Semana 6). Las preguntas se mezclan en cada intento.</p>
+    <div class="hero-pills">
+      <span class="pill blue">15 preguntas</span>
+      <span class="pill green">Feedback inmediato</span>
+      <span class="pill amber">Orden aleatorio</span>
+      <span class="pill">Ciclo 07 · 2026</span>
+    </div>
+  </div>
+
+  <!-- PROGRESS -->
+  <div class="progress-wrap" id="progress-wrap">
+    <div class="progress-top">
+      <span class="progress-label" id="q-counter">Pregunta 1 de 15</span>
+      <span class="progress-score" id="score-live">Puntos: 0</span>
+    </div>
+    <div class="progress-bar-bg"><div class="progress-bar-fill" id="pbar"></div></div>
+  </div>
+
+  <!-- QUIZ AREA -->
+  <div id="quiz-area">
+    <div id="section-tag" class="section-tag desc"><span class="dot"></span><span id="tag-text"></span></div>
+    <div class="q-card">
+      <div class="q-text" id="q-text"></div>
+      <div class="q-hint" id="q-hint"></div>
+      <div class="options" id="options"></div>
+      <div class="feedback" id="feedback"></div>
+    </div>
+    <div class="nav-row">
+      <button class="next-btn" id="next-btn" onclick="nextQuestion()">
+        <span id="next-label">Siguiente</span>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </button>
+    </div>
+  </div>
+
+  <!-- RESULTS -->
+  <div class="results" id="results">
+    <div class="results-hero">
+      <div class="results-emoji" id="res-emoji"></div>
+      <div class="results-pct" id="res-pct"></div>
+      <div class="results-label" id="res-label"></div>
+    </div>
+    <div class="stats-grid">
+      <div class="stat-card"><div class="stat-label">Correctas</div><div class="stat-val g" id="res-correct"></div></div>
+      <div class="stat-card"><div class="stat-label">Incorrectas</div><div class="stat-val r" id="res-wrong"></div></div>
+      <div class="stat-card"><div class="stat-label">Estadística descriptiva</div><div class="stat-val b" id="res-desc"></div></div>
+      <div class="stat-card"><div class="stat-label">Medidas de asociación</div><div class="stat-val a" id="res-anal"></div></div>
+    </div>
+    <div class="msg-box" id="res-msg"></div>
+    <div class="results-actions">
+      <button class="btn-primary" onclick="restartQuiz()">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>
+        Reiniciar quiz
+      </button>
+      <button class="btn-secondary" onclick="window.print()">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+        Guardar resultados
+      </button>
+    </div>
+    <div class="review-title">Revisión de respuestas</div>
+    <div id="review-list"></div>
+  </div>
+
+</main>
+
+<footer class="site-footer">
+  <strong>Medicina Basada en Evidencias e Inteligencia Artificial</strong> · UPAO · Facultad de Medicina Humana · Ciclo 07 · 2026
+</footer>
+
+<script>
+const QUESTIONS = [
+  {
+    section:"descriptiva",
+    q:"En un estudio sobre presión arterial sistólica en 200 pacientes, los valores muestran distribución normal con media 130 mmHg y mediana 129 mmHg. ¿Qué medida de tendencia central es más adecuada para resumir este conjunto de datos?",
+    opts:["Mediana, porque los valores son continuos","Moda, porque es la más frecuente","Media, porque la distribución es normal y simétrica","Rango intercuartílico, porque mide dispersión"],
+    correct:2,
+    feedback:"Cuando los datos siguen distribución normal (simétrica), la media es la medida de tendencia central más adecuada e informativa. La mediana se prefiere cuando hay asimetría o valores extremos que distorsionan la media."
+  },
+  {
+    section:"descriptiva",
+    q:"Un artículo reporta: 'La edad de los pacientes fue 45 (RIC: 38–57) años'. ¿Qué indica este reporte?",
+    opts:["La media es 45 y la desviación estándar es 38–57","La mediana es 45 y el 50% central de los datos va de 38 a 57 años","El valor mínimo es 38 y el máximo es 57","La media es 45 y el rango es 19 años"],
+    correct:1,
+    feedback:"El formato 'mediana (RIC: Q1–Q3)' indica que la mediana es 45 y el rango intercuartílico contiene el 50% central de los datos, entre el percentil 25 (38) y el percentil 75 (57). Se usa cuando la distribución no es normal."
+  },
+  {
+    section:"descriptiva",
+    q:"¿Cuál de las siguientes variables es de escala NOMINAL?",
+    opts:["Estadio del tumor (I, II, III, IV)","Grupo sanguíneo (A, B, AB, O)","Nivel de dolor (leve, moderado, severo)","Temperatura corporal en °C"],
+    correct:1,
+    hint:"Las escalas nominales solo nombran categorías sin orden inherente.",
+    feedback:"El grupo sanguíneo es nominal: las categorías no tienen orden entre sí. El estadio tumoral y el nivel de dolor son ordinales (tienen orden). La temperatura en °C es de escala intervalo."
+  },
+  {
+    section:"descriptiva",
+    q:"En una muestra de 500 pacientes con diabetes tipo 2, el 68% son mujeres. ¿Cómo debe reportarse este dato?",
+    opts:["Media ± desviación estándar","Mediana (RIC)","Frecuencia absoluta y relativa: 340 (68%)","Rango: 0–100"],
+    correct:2,
+    feedback:"Las variables categóricas (como el sexo) se reportan con frecuencias absolutas (n) y relativas (%). La media y mediana son para variables numéricas continuas."
+  },
+  {
+    section:"descriptiva",
+    q:"Un estudio reporta hemoglobina con media 11.2 g/dL y DE 2.8 g/dL. ¿Qué significa la desviación estándar en este contexto?",
+    opts:["El valor máximo de hemoglobina observado","La diferencia entre el percentil 75 y el percentil 25","La variabilidad promedio de los valores respecto a la media","El error de medición del instrumento"],
+    correct:2,
+    feedback:"La desviación estándar (DE) mide la dispersión promedio de los valores alrededor de la media. Una DE pequeña indica homogeneidad; una DE grande indica mayor variabilidad en la muestra."
+  },
+  {
+    section:"descriptiva",
+    q:"¿En cuál de los siguientes escenarios se prefiere la MEDIANA sobre la MEDIA?",
+    opts:["Edad en una muestra con distribución normal","Peso corporal en atletas de alto rendimiento (distribución simétrica)","Ingreso económico mensual en una comunidad con alta desigualdad","Temperatura corporal en una UCI (distribución normal)"],
+    correct:2,
+    feedback:"El ingreso económico suele tener distribución muy asimétrica (algunos individuos con ingresos extremadamente altos distorsionan la media). La mediana no se ve afectada por valores extremos y representa mejor al individuo típico de la población."
+  },
+  {
+    section:"descriptiva",
+    q:"Un investigador reporta que el 30% de los pacientes tiene HTA. ¿A qué tipo de estadístico corresponde este dato?",
+    opts:["Medida de tendencia central","Medida de dispersión","Frecuencia relativa de una variable categórica","Medida de asociación"],
+    correct:2,
+    feedback:"El 30% es una frecuencia relativa que describe la distribución de una variable categórica (presencia/ausencia de HTA). Las medidas de tendencia central (media, mediana) son para variables numéricas."
+  },
+  {
+    section:"analitica",
+    q:"Un estudio transversal reporta OR = 3.2 (IC 95%: 2.1–4.8) para la asociación entre obesidad y DM2. La prevalencia de DM2 en el estudio es 35%. ¿Cuál es la interpretación más correcta?",
+    opts:["Los pacientes con obesidad tienen 3.2 veces más riesgo relativo de DM2","El OR sobreestima el efecto porque la prevalencia de DM2 supera el 10%; debería usarse RP","El OR es correcto porque el IC 95% no incluye el valor nulo","La asociación no es significativa porque el OR es mayor a 1"],
+    correct:1,
+    feedback:"Cuando la prevalencia del desenlace supera el 10% en un estudio transversal, el OR sobreestima el RR. Con prevalencia de 35%, la medida adecuada es la Razón de Prevalencias (RP), no el OR."
+  },
+  {
+    section:"analitica",
+    q:"Un estudio de cohorte reporta RR = 0.55 (IC 95%: 0.38–0.79, p = 0.001) para el efecto de una intervención educativa sobre el abandono del tabaco. ¿Cómo se interpreta este resultado?",
+    opts:["La intervención aumenta 45% el riesgo de abandonar el tabaco","La intervención reduce 45% el riesgo de no abandonar el tabaco; la asociación NO es significativa","Los participantes con la intervención tienen 45% menos riesgo del desenlace negativo; la asociación es significativa (IC no incluye 1)","El resultado no es interpretable porque el RR es menor a 1"],
+    correct:2,
+    feedback:"RR = 0.55 < 1 indica factor protector: los intervenidos tienen 45% menos riesgo del desenlace negativo (no abandonar el tabaco). El IC 95% (0.38–0.79) no incluye el 1 → asociación estadísticamente significativa. p = 0.001 < 0.05 corrobora."
+  },
+  {
+    section:"analitica",
+    q:"Un artículo de casos y controles reporta OR = 1.0 (IC 95%: 0.7–1.4). ¿Qué conclusión es correcta?",
+    opts:["Hay asociación significativa entre exposición y desenlace","La exposición es un factor protector","No hay asociación estadísticamente significativa entre exposición y desenlace","El OR es incorrecto porque debería ser mayor a 2 para ser relevante"],
+    correct:2,
+    feedback:"OR = 1.0 indica ausencia de asociación. Además, el IC 95% (0.7–1.4) incluye el valor nulo (1), lo que confirma que NO hay asociación estadísticamente significativa (p > 0.05)."
+  },
+  {
+    section:"analitica",
+    q:"¿Cuál es la fórmula correcta del Odds Ratio a partir de la tabla 2×2 (celdas a, b, c, d)?",
+    opts:["OR = (a/a+b) ÷ (c/c+d)","OR = (a × d) ÷ (b × c)","OR = (a + d) ÷ (b + c)","OR = a ÷ (a + b)"],
+    correct:1,
+    hint:"El OR se calcula con el 'producto cruzado' de la tabla 2×2.",
+    feedback:"El OR se calcula con el producto cruzado: (a × d) ÷ (b × c). Donde a = expuestos con desenlace, b = expuestos sin desenlace, c = no expuestos con desenlace, d = no expuestos sin desenlace."
+  },
+  {
+    section:"analitica",
+    q:"En un estudio transversal: 80 de 200 expuestos y 40 de 300 no expuestos desarrollaron el desenlace. ¿Cuál es la Razón de Prevalencias (RP)?",
+    opts:["RP = 1.5","RP = 2.0","RP = 3.0","RP = 0.5"],
+    correct:2,
+    hint:"Prevalencia expuestos = 80/200. Prevalencia no expuestos = 40/300. RP = P1 ÷ P2.",
+    feedback:"Prevalencia expuestos = 80/200 = 0.40 (40%). Prevalencia no expuestos = 40/300 = 0.133 (13.3%). RP = 0.40 ÷ 0.133 = 3.0. Los expuestos tienen 3 veces más prevalencia del desenlace."
+  },
+  {
+    section:"analitica",
+    q:"Un IC 95% de (1.2–3.8) para un OR implica que:",
+    opts:["No hay asociación significativa porque el intervalo es amplio","Hay asociación estadísticamente significativa porque el IC no incluye el valor nulo (1)","El OR es igual a 1 dentro del intervalo","El resultado es inconcluso porque el IC incluye al 3"],
+    correct:1,
+    feedback:"Un IC 95% que no incluye el valor nulo (1 para OR y RR) indica significancia estadística con p < 0.05. El ancho del intervalo informa sobre la precisión del estimado, pero no sobre la significancia estadística."
+  },
+  {
+    section:"analitica",
+    q:"¿Cuándo es correcto usar OR en lugar de RP en un estudio transversal?",
+    opts:["Siempre que se trate de un estudio observacional","Cuando la prevalencia del desenlace es mayor al 10%","Cuando la prevalencia del desenlace es menor o igual al 10%","Nunca: el OR solo aplica a estudios de casos y controles"],
+    correct:2,
+    feedback:"El OR puede usarse en estudios transversales únicamente cuando la prevalencia del desenlace es ≤ 10%, porque en ese caso el OR se aproxima razonablemente al RR. Con prevalencias > 10%, el OR sobreestima el efecto y debe usarse RP."
+  },
+  {
+    section:"analitica",
+    q:"Un estudio de cohorte sigue a 1,000 trabajadores de salud durante 2 años. 120 expuestos y 80 no expuestos desarrollan la infección. ¿Qué medida de asociación es la CORRECTA para este diseño?",
+    opts:["Razón de Prevalencias (RP), porque compara proporciones","Odds Ratio (OR), porque el desenlace es dicotómico","Riesgo Relativo (RR), porque el diseño es longitudinal y mide incidencia","Diferencia de riesgos absoluta, porque los números son grandes"],
+    correct:2,
+    hint:"Los estudios de cohorte siguen participantes en el tiempo → miden incidencia.",
+    feedback:"En estudios de cohorte se sigue a los participantes prospectivamente y se mide la incidencia del desenlace en el tiempo. La medida natural es el Riesgo Relativo (RR), que compara directamente la incidencia entre expuestos y no expuestos."
+  }
+];
+
+let shuffled=[], current=0, score=0, answered=false;
+let descC=0, descT=0, analC=0, analT=0, results=[];
+
+function shuffle(a){const b=[...a];for(let i=b.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[b[i],b[j]]=[b[j],b[i]];}return b;}
+
+function start(){
+  shuffled=shuffle(QUESTIONS);
+  current=0;score=0;answered=false;
+  descC=0;descT=0;analC=0;analT=0;results=[];
+  document.getElementById('results').style.display='none';
+  document.getElementById('quiz-area').style.display='block';
+  document.getElementById('progress-wrap').style.display='block';
+  render();
+}
+
+function render(){
+  const q=shuffled[current], total=shuffled.length;
+  document.getElementById('pbar').style.width=((current/total)*100)+'%';
+  document.getElementById('q-counter').textContent='Pregunta '+(current+1)+' de '+total;
+  document.getElementById('score-live').textContent='Puntos: '+score;
+
+  const tag=document.getElementById('section-tag');
+  const tagText=document.getElementById('tag-text');
+  if(q.section==='descriptiva'){
+    tag.className='section-tag desc';
+    tagText.textContent='Estadística descriptiva — Semana 5';
+  } else {
+    tag.className='section-tag anal';
+    tagText.textContent='Medidas de asociación — Semana 6';
+  }
+
+  document.getElementById('q-text').textContent=q.q;
+  const hint=document.getElementById('q-hint');
+  if(q.hint){hint.textContent='💡 Pista: '+q.hint;hint.style.display='block';}
+  else{hint.style.display='none';}
+
+  const opts=document.getElementById('options');
+  opts.innerHTML='';
+  ['A','B','C','D'].forEach((l,i)=>{
+    const btn=document.createElement('button');
+    btn.className='opt-btn';
+    btn.innerHTML='<span class="opt-letter">'+l+'</span><span>'+q.opts[i]+'</span>';
+    btn.onclick=()=>select(i);
+    opts.appendChild(btn);
+  });
+
+  const fb=document.getElementById('feedback');
+  fb.style.display='none';fb.className='feedback';fb.innerHTML='';
+
+  const nb=document.getElementById('next-btn');
+  nb.className='next-btn';
+  document.getElementById('next-label').textContent=current===shuffled.length-1?'Ver resultados':'Siguiente';
+  answered=false;
+}
+
+function select(idx){
+  if(answered)return;
+  answered=true;
+  const q=shuffled[current];
+  const ok=idx===q.correct;
+  if(ok){score++;if(q.section==='descriptiva')descC++;else analC++;}
+  if(q.section==='descriptiva')descT++;else analT++;
+  results.push({q:q.q,chosen:q.opts[idx],correct:q.opts[q.correct],ok});
+
+  document.querySelectorAll('.opt-btn').forEach((b,i)=>{
+    b.disabled=true;
+    if(i===idx&&ok)b.classList.add('correct');
+    else if(i===idx&&!ok)b.classList.add('wrong');
+    else if(i===q.correct)b.classList.add('missed');
+  });
+
+  const fb=document.getElementById('feedback');
+  fb.innerHTML='<span class="feedback-icon">'+(ok?'✓':'✗')+'</span>'+q.feedback;
+  fb.className='feedback '+(ok?'correct':'wrong');
+  fb.style.display='block';
+
+  document.getElementById('next-btn').classList.add('visible');
+}
+
+function nextQuestion(){
+  current++;
+  if(current>=shuffled.length)showResults();
+  else render();
+}
+
+function showResults(){
+  document.getElementById('quiz-area').style.display='none';
+  document.getElementById('pbar').style.width='100%';
+  const total=shuffled.length;
+  const pct=Math.round((score/total)*100);
+
+  const pctEl=document.getElementById('res-pct');
+  pctEl.textContent=pct+'%';
+  pctEl.className='results-pct '+(pct>=80?'great':pct>=60?'ok':'low');
+
+  document.getElementById('res-emoji').textContent=pct>=90?'🏆':pct>=70?'👏':pct>=50?'📚':'💪';
+  document.getElementById('res-label').textContent=score+' de '+total+' preguntas correctas';
+  document.getElementById('res-correct').textContent=score;
+  document.getElementById('res-wrong').textContent=total-score;
+
+  const dPct=descT>0?Math.round((descC/descT)*100):0;
+  const aPct=analT>0?Math.round((analC/analT)*100):0;
+  const dEl=document.getElementById('res-desc');
+  dEl.textContent=dPct+'%';
+  dEl.className='stat-val '+(dPct>=70?'g':dPct>=50?'a':'r');
+  const aEl=document.getElementById('res-anal');
+  aEl.textContent=aPct+'%';
+  aEl.className='stat-val '+(aPct>=70?'g':aPct>=50?'a':'r');
+
+  let msg='';
+  if(pct>=90)msg='Excelente dominio de los contenidos. Demuestra comprensión sólida tanto de estadística descriptiva (Semana 5) como de medidas de asociación (Semana 6). ¡Listo para el examen parcial!';
+  else if(pct>=70)msg='Buen desempeño. Revisa las preguntas incorrectas, especialmente los criterios de selección RP vs OR y la interpretación del IC 95%.';
+  else if(pct>=50)msg='Desempeño en desarrollo. Repasa las diapositivas de la Semana 5 (variables y estadística descriptiva) y la Semana 6 (RP, OR, RR y criterios de selección) antes del examen.';
+  else msg='Se recomienda revisar con atención los contenidos de las Semanas 5 y 6. Consulta con tu docente las dudas antes de la próxima sesión.';
+  if(dPct<aPct-15)msg+=' Área de mayor dificultad: estadística descriptiva (Semana 5).';
+  else if(aPct<dPct-15)msg+=' Área de mayor dificultad: medidas de asociación (Semana 6).';
+  document.getElementById('res-msg').textContent=msg;
+
+  const rev=document.getElementById('review-list');
+  rev.innerHTML='';
+  results.forEach((r,i)=>{
+    const d=document.createElement('div');
+    d.className='review-item';
+    d.innerHTML='<div class="review-q">'+(i+1)+'. '+r.q.substring(0,90)+(r.q.length>90?'…':'')+'</div>'+
+      '<div class="review-ans '+(r.ok?'c':'w')+'">'+(r.ok?'✓ Correcta: ':'✗ Tu respuesta: ')+r.chosen+'</div>'+
+      (!r.ok?'<div class="review-ans correct">→ Respuesta correcta: '+r.correct+'</div>':'');
+    rev.appendChild(d);
+  });
+
+  document.getElementById('results').style.display='block';
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function restartQuiz(){
+  window.scrollTo({top:0,behavior:'smooth'});
+  start();
+}
+
+start();
+</script>
+</body>
+</html>
